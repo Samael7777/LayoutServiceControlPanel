@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/Элементы решения/">
+    <File Path="Directory.Build.props" />
+  </Folder>
+  <Project Path="ControlPanel.Core/ControlPanel.Core.csproj" Id="7eb0cbc5-c2d6-404f-aa5c-bc6d4eb4b8c1" />
+  <Project Path="ControlPanel.UI/ControlPanel.UI.csproj" />
+  <Project Path="LayoutTools.Managed/LayoutTools.Managed.csproj" Id="37de070a-bd1c-4da0-a089-5da2a3d9dfd0" />
+</Solution>

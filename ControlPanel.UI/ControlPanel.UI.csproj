@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>ControlPanel.UI</RootNamespace>
+    <AssemblyName>ControlPanel.UI</AssemblyName>
+  </PropertyGroup>
+	<PropertyGroup>
+		<SatelliteResourceLanguages>en;ru</SatelliteResourceLanguages>
+		<ApplicationManifest>app.manifest</ApplicationManifest>
+		<ApplicationIcon>Resources\Keyboard.ico</ApplicationIcon>
+	</PropertyGroup>
+	<ItemGroup>
+	  <Content Include="Resources\Keyboard.ico" />
+	</ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="WPF-UI" Version="4.3.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ControlPanel.Core\ControlPanel.Core.csproj" />
+  </ItemGroup>
+
+</Project>

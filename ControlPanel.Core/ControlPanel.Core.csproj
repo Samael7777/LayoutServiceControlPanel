@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	
+	<ItemGroup>
+		<PackageReference Include="RegistryWatcher" Version="1.2.0" />
+		
+		<PackageReference Include="TaskScheduler" Version="2.12.2" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'">
+		<PackageReference Include="System.Collections.Immutable" Version="10.0.12" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\LayoutTools.Managed\LayoutTools.Managed.csproj" />
+	</ItemGroup>
+
+</Project>
