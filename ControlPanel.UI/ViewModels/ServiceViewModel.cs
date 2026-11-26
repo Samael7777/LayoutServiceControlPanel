@@ -1,7 +1,9 @@
+using System.Globalization;
 using System.Security.Principal;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using ControlPanel.Core;
 using ControlPanel.Core.Services;
 using TaskState = Microsoft.Win32.TaskScheduler.TaskState;
 
@@ -32,6 +34,8 @@ public sealed partial class ServiceViewModel : ObservableObject, IDisposable
 
         Snapshot = service.GetStatus();
         service.TaskStatusChanged += OnTaskStatusChanged;
+
+        IsTraceEnabled = Settings.IsTraceEnabled;
     }
 
     #region State
@@ -100,12 +104,12 @@ public sealed partial class ServiceViewModel : ObservableObject, IDisposable
     /// <summary>"Repair" when a task exists but needs fixing, otherwise "Create".</summary>
     public string CreateText => Snapshot.Exists ? "Repair" : "Create";
 
-    public bool IsConfigWarningOpen => Snapshot.Exists && !Snapshot.IsConfigValid;
+    public bool IsConfigWarningOpen => Snapshot is { Exists: true, IsConfigValid: false };
 
     public string LastRunText =>
         !Snapshot.Exists || Snapshot.LastRunTime.Year < 2000
             ? "Never"
-            : Snapshot.LastRunTime.ToString("g");
+            : Snapshot.LastRunTime.ToString("g", CultureInfo.InvariantCulture);
 
     public string LastResultText
     {
@@ -121,13 +125,25 @@ public sealed partial class ServiceViewModel : ObservableObject, IDisposable
 
     #endregion
 
+    #region Properties
+
+    [ObservableProperty]
+    private bool _isTraceEnabled;
+
+    partial void OnIsTraceEnabledChanged(bool value)
+    {
+        Settings.IsTraceEnabled = value;
+    }
+
+    #endregion
+
     #region Commands
 
     private bool CanCreate() => !IsBusy && (!Snapshot.Exists || !Snapshot.IsConfigValid);
 
     private bool CanDelete() => !IsBusy && Snapshot.Exists;
 
-    private bool CanStart() => !IsBusy && Snapshot.Exists && Snapshot.IsEnabled && !Snapshot.IsRunning;
+    private bool CanStart() => !IsBusy && Snapshot is { Exists: true, IsEnabled: true, IsRunning: false };
 
     private bool CanStop() => !IsBusy && Snapshot.IsRunning;
 

@@ -62,10 +62,7 @@ public sealed class CycledLayoutsService
         Func<IReadOnlyCollection<uint>>? loadCycled = null,
         Action<IReadOnlyCollection<uint>>? saveCycled = null)
     {
-        if (getUserLayouts is null)
-            throw new ArgumentNullException(nameof(getUserLayouts));
-
-        _getUserLayouts = getUserLayouts;
+        _getUserLayouts = getUserLayouts ?? throw new ArgumentNullException(nameof(getUserLayouts));
         _saveCycled = saveCycled ?? (value => Settings.CycledLayouts = value);
 
         var load = loadCycled ?? (() => Settings.CycledLayouts);

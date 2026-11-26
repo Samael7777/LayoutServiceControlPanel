@@ -13,8 +13,8 @@ namespace ControlPanel.UI.ViewModels;
 /// </summary>
 public sealed partial class HotkeyViewModel : ObservableObject
 {
-    private static readonly IReadOnlyList<KeyItem> AllKeys = BuildAllKeys();
-    private static readonly Dictionary<uint, KeyItem> KeysByCode = AllKeys.ToDictionary(k => k.Code);
+    private static readonly IReadOnlyList<KeyItem> s_AllKeys = BuildAllKeys();
+    private static readonly Dictionary<uint, KeyItem> s_KeysByCode = s_AllKeys.ToDictionary(k => k.Code);
 
     private uint[] _combo = [];
 
@@ -115,7 +115,7 @@ public sealed partial class HotkeyViewModel : ObservableObject
                 .Select((code, index) =>
                 {
                     var hex = $"0x{code:X2}";
-                    var name = KeysByCode.TryGetValue(code, out var key) ? key.Name : hex;
+                    var name = s_KeysByCode.TryGetValue(code, out var key) ? key.Name : hex;
                     return new HotkeyChip(name, hex, HasLeadingPlus: index > 0);
                 })
         ];
@@ -131,7 +131,7 @@ public sealed partial class HotkeyViewModel : ObservableObject
 
         FilteredKeys =
         [
-            .. AllKeys
+            .. s_AllKeys
                 .Where(k => !used.Contains(k.Code) &&
                             (query.Length == 0 ||
                              k.Name.Contains(query, StringComparison.OrdinalIgnoreCase) ||
