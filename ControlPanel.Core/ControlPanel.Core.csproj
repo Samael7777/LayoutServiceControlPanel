@@ -1,8 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	
 	<ItemGroup>
-		<PackageReference Include="RegistryWatcher" Version="1.2.0" />
-		
 		<PackageReference Include="TaskScheduler" Version="2.12.2" />
 	</ItemGroup>
 
