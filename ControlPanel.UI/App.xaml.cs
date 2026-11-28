@@ -4,13 +4,15 @@ using ControlPanel.Core;
 using ControlPanel.Core.Services;
 using ControlPanel.UI.ViewModels;
 using LayoutTools.Managed;
+using PhoenixTools.Watchers;
 
 namespace ControlPanel.UI;
 
-public partial class App : Application
+public partial class App
 {
     private SwitcherTaskService? _taskService;
     private MainViewModel? _viewModel;
+    private RegistryWatcher? _watcher;
 
     protected override void OnStartup(StartupEventArgs e)
     {
@@ -26,6 +28,10 @@ public partial class App : Application
 
         _viewModel = new MainViewModel(_taskService, layoutsService);
 
+        _watcher = new RegistryWatcher(AppConstants.ApplicationRegRoot, AppConstants.ApplicationRegSubkey, false);
+        _watcher.RegistryChanged += (_, _) => { _viewModel.Refresh(); };
+        _watcher.Start();
+
         var window = new MainWindow { DataContext = _viewModel };
         MainWindow = window;
         window.Show();
@@ -33,6 +39,7 @@ public partial class App : Application
 
     protected override void OnExit(ExitEventArgs e)
     {
+        _watcher?.Dispose();
         _viewModel?.Dispose();
         _taskService?.Dispose();
         base.OnExit(e);

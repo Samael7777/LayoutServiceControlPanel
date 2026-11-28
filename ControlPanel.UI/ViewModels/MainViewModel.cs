@@ -18,6 +18,13 @@ public sealed class MainViewModel : IDisposable
 
     public HotkeyViewModel Hotkey { get; }
 
+    public void Refresh()
+    {
+        Service.RefreshCommand.Execute(null);
+        Layouts.RefreshCommand.Execute(null);
+        Hotkey.RefreshCommand.Execute(null);
+    }
+
     public void Dispose()
     {
         Service.Dispose();

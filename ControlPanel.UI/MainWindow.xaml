@@ -351,7 +351,7 @@
                                 <ui:ToggleSwitch Grid.Column="1" 
                                                  HorizontalAlignment="Right"
                                                  OnContent="On" OffContent="Off"
-                                                 IsChecked="{Binding IsTraceEnabled, Mode=TwoWay}"/>
+                                                 IsChecked="{Binding IsTraceEnabled}"/>
                             </Grid>
                         </Border>
 

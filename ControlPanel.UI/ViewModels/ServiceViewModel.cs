@@ -35,7 +35,7 @@ public sealed partial class ServiceViewModel : ObservableObject, IDisposable
         Snapshot = service.GetStatus();
         service.TaskStatusChanged += OnTaskStatusChanged;
 
-        IsTraceEnabled = Settings.IsTraceEnabled;
+        UpdateSettings();
     }
 
     #region State
@@ -190,6 +190,19 @@ public sealed partial class ServiceViewModel : ObservableObject, IDisposable
         }
     }
 
+    [RelayCommand]
+    private void Refresh()
+    {
+        if (_dispatcher.CheckAccess())
+        {
+            UpdateSettings();
+        }
+        else
+        {
+            _dispatcher.Invoke(UpdateSettings);
+        }
+    }
+
     #endregion
 
     #region Events
@@ -215,6 +228,11 @@ public sealed partial class ServiceViewModel : ObservableObject, IDisposable
     }
 
     #endregion
+
+    private void UpdateSettings()
+    {
+        IsTraceEnabled = Settings.IsTraceEnabled;
+    }
 
     private static bool IsElevated()
     {

@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ControlPanel.Core;
 using ControlPanel.UI.Models;
+using System.Windows.Threading;
 
 namespace ControlPanel.UI.ViewModels;
 
@@ -16,19 +17,13 @@ public sealed partial class HotkeyViewModel : ObservableObject
     private static readonly IReadOnlyList<KeyItem> s_AllKeys = BuildAllKeys();
     private static readonly Dictionary<uint, KeyItem> s_KeysByCode = s_AllKeys.ToDictionary(k => k.Code);
 
+    private readonly Dispatcher _dispatcher = Dispatcher.CurrentDispatcher;
+
     private uint[] _combo = [];
 
     public HotkeyViewModel()
     {
-        try
-        {
-            _combo = [.. Settings.Hotkey];
-        }
-        catch (Exception ex)
-        {
-            ReportError(ex);
-        }
-
+        Reload();
         Rebuild();
     }
 
@@ -65,6 +60,21 @@ public sealed partial class HotkeyViewModel : ObservableObject
 
     private bool CanClear() => !IsEmpty;
 
+    [RelayCommand]
+    private void Refresh()
+    {
+        if (_dispatcher.CheckAccess())
+        {
+            Reload();
+            Rebuild();
+        }
+        else
+        {
+            _dispatcher.InvokeAsync(Reload);
+            _dispatcher.InvokeAsync(Rebuild);
+        }
+    }
+
     [RelayCommand(CanExecute = nameof(CanClear))]
     private void Clear() => Save([]);
 
@@ -90,6 +100,18 @@ public sealed partial class HotkeyViewModel : ObservableObject
     #endregion
 
     #region Internals
+
+    private void Reload()
+    {
+        try
+        {
+            _combo = [.. Settings.Hotkey];
+        }
+        catch (Exception ex)
+        {
+            ReportError(ex);
+        }
+    }
 
     private void Save(uint[] combo)
     {

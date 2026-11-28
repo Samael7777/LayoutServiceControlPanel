@@ -18,6 +18,7 @@
 	</ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="RegistryWatcher" Version="1.2.0" />
     <PackageReference Include="WPF-UI" Version="4.3.0" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
     <PackageReference Include="Costura.Fody" Version="6.2.0">
@@ -28,6 +29,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ControlPanel.Core\ControlPanel.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="PolySharp" Version="1.17.1" />
   </ItemGroup>
 
 </Project>

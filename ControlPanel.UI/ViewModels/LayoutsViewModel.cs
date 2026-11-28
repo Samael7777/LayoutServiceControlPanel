@@ -107,7 +107,19 @@ public sealed partial class LayoutsViewModel : ObservableObject, IDisposable
 
     /// <summary>Re-reads the system layouts (normally done by an external watcher).</summary>
     [RelayCommand]
-    private void Refresh() => Execute(() => _service.Update());
+    private void Refresh()
+    {
+        var cmd = () => Execute(() => _service.Update());
+
+        if (_dispatcher.CheckAccess())
+        {
+            cmd.Invoke();
+        }
+        else
+        {
+            _dispatcher.InvokeAsync(cmd);
+        }
+    }
 
     /// <summary>Runs a service operation, reloads the lists and reports failures (e.g. settings write errors).</summary>
     private bool Execute(Func<bool> operation)

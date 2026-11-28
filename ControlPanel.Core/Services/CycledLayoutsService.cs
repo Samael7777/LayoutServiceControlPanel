@@ -247,7 +247,7 @@ public sealed class CycledLayoutsService
         var raw = _getUserLayouts();
         return raw is null or { Length: 0 }
             ? ImmutableArray<uint>.Empty
-            : raw.Distinct().ToImmutableArray();
+            : [.. raw.Distinct()];
     }
 
     /// <summary>Keeps only layouts present in the system, drops duplicates, preserves order.</summary>

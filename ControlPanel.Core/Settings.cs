@@ -26,13 +26,13 @@ public static class Settings
         set => WriteDword(AppConstants.TraceEnabled, value ? 1u : 0u);
     }
 
-    private static uint ReadDword(string name)
+    private static int ReadDword(string name)
     {
         s_Lock.EnterReadLock();
         try
         {
             using var regKey = OpenCreateAppKey();
-            return regKey.GetValue(name) as uint? ?? 0;
+            return regKey.GetValue(name) as int? ?? 0;
         }
         finally
         {
